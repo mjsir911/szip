@@ -44,7 +44,10 @@ func (r *Reader) Next() (h zip.FileHeader, err error) {
 	binary.Read(r.r, binary.LittleEndian, &h.ModifiedDate)
 	binary.Read(r.r, binary.LittleEndian, &h.CRC32)
 	binary.Read(r.r, binary.LittleEndian, &h.CompressedSize)
+	h.CompressedSize64 = uint64(h.CompressedSize)
 	binary.Read(r.r, binary.LittleEndian, &h.UncompressedSize)
+	h.UncompressedSize64 = uint64(h.UncompressedSize)
+	h.Modified = h.ModTime()
 	var namelen uint16
 	binary.Read(r.r, binary.LittleEndian, &namelen)
 	var extralen uint16
@@ -54,7 +57,7 @@ func (r *Reader) Next() (h zip.FileHeader, err error) {
 	h.Name = string(name)
 	h.Extra = make([]byte, extralen)
 	binary.Read(r.r, binary.LittleEndian, &h.Extra)
-	r.cur = decompressors[h.Method](io.LimitReader(r.r, int64(h.CompressedSize)));
+	r.cur = decompressors[h.Method](io.LimitReader(r.r, int64(h.CompressedSize64)));
 	return
 }
 

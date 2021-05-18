@@ -30,7 +30,10 @@ func init() {
 func (r *Reader) Next() (h zip.FileHeader, err error) {
 	var signature uint32
 	binary.Read(r.r, binary.LittleEndian, &signature)
-	if signature != 0x04034b50 {
+	if signature == 0x2014b50 {
+		err = io.EOF;
+		return;
+	} else if signature != 0x04034b50 {
 		err = errors.New(fmt.Sprintf("szip: Invalid signature: %x", signature))
 		return
 	}

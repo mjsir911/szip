@@ -30,3 +30,9 @@ go's http lazy downloading with that.
 [3]: https://golang.org/src/archive/zip/
 [4]: https://golang.org/pkg/archive/tar/#Reader
 [5]: https://golang.org/pkg/compress/flate
+
+
+## Similar projects
+
+### [stream-unzip](https://github.com/uktrade/stream-unzip)
+- python

@@ -19,6 +19,14 @@ func NewReader(ri io.Reader) (ro Reader, err error) {
 	return
 }
 
+var decompressors map[uint16]zip.Decompressor;
+
+func init() {
+	decompressors = make(map[uint16]zip.Decompressor)
+	decompressors[zip.Store] = io.NopCloser;
+	decompressors[zip.Deflate] = flate.NewReader;
+}
+
 func (r *Reader) Next() (h zip.FileHeader, err error) {
 	var signature uint32
 	binary.Read(r.r, binary.LittleEndian, &signature)
@@ -43,7 +51,7 @@ func (r *Reader) Next() (h zip.FileHeader, err error) {
 	h.Name = string(name)
 	h.Extra = make([]byte, extralen)
 	binary.Read(r.r, binary.LittleEndian, &h.Extra)
-	r.cur = flate.NewReader(r.r)
+	r.cur = decompressors[h.Method](io.LimitReader(r.r, int64(h.CompressedSize)));
 	return
 }
 

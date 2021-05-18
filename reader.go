@@ -6,6 +6,7 @@ import (
 	"encoding/binary"
 	"compress/flate"
 	"errors"
+	"fmt"
 )
 
 type Reader struct {
@@ -19,10 +20,10 @@ func NewReader(ri io.Reader) (ro Reader, err error) {
 }
 
 func (r *Reader) Next() (h zip.FileHeader, err error) {
-	var signature int32
+	var signature uint32
 	binary.Read(r.r, binary.LittleEndian, &signature)
 	if signature != 0x04034b50 {
-		err = errors.New("bad stuff happenin")
+		err = errors.New(fmt.Sprintf("szip: Invalid signature: %x", signature))
 		return
 	}
 	binary.Read(r.r, binary.LittleEndian, &h.ReaderVersion)

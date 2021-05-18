@@ -51,6 +51,10 @@ func (r Reader) Read(b []byte) (n int, err error) {
 	return r.cur.Read(b)
 }
 
+func (r Reader) WriteTo(w io.Writer) (n int64, err error) {
+	return io.Copy(w, r.cur)
+}
+
 func (r Reader) Close() error {
 	return r.cur.Close()
 }

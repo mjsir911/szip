@@ -1,7 +1,7 @@
 package main
 
 import (
-	"szip"
+	"sirabella.org/code/szip"
 	"archive/zip"
 	"io"
 	"path/filepath"

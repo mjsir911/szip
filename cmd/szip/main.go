@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"os"
-	"szip"
-	"szip/tar"
+	"sirabella.org/code/szip"
+	"sirabella.org/code/szip/tar"
 )
 
 

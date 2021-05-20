@@ -7,7 +7,7 @@ import (
 	"archive/zip"
 	"io"
 	"io/fs"
-	"szip"
+	"sirabella.org/code/szip"
 )
 
 type RecordHeader interface {

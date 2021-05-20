@@ -10,12 +10,12 @@ import (
 )
 
 type Reader struct {
-	r io.Reader
+	r   io.Reader
 	cur io.ReadCloser
 
 	// Central directory fields, unused mid-extraction
-	FileHeader []zip.FileHeader
-	n int
+	FileHeader       []zip.FileHeader
+	n                int
 	centralDirectory bool
 }
 
@@ -26,18 +26,18 @@ func NewReader(ri io.Reader) (ro Reader, err error) {
 	return
 }
 
-var decompressors map[uint16]zip.Decompressor;
+var decompressors map[uint16]zip.Decompressor
 
 func init() {
 	decompressors = make(map[uint16]zip.Decompressor)
-	decompressors[zip.Store] = io.NopCloser;
-	decompressors[zip.Deflate] = flate.NewReader;
+	decompressors[zip.Store] = io.NopCloser
+	decompressors[zip.Deflate] = flate.NewReader
 }
 
 const (
-	LOCALRECORD uint32 = 0x04034b50
+	LOCALRECORD   uint32 = 0x04034b50
 	CENTRALRECORD uint32 = 0x2014b50
-	EOCD uint32 = 0x06054b50
+	EOCD          uint32 = 0x06054b50
 )
 
 func readHeader(signature uint32, r io.Reader) (h zip.FileHeader, err error) {
@@ -112,23 +112,23 @@ func (r *Reader) Next() (h zip.FileHeader, err error) {
 	if signature == CENTRALRECORD {
 		r.centralDirectory = true
 		// collection is punted to CentralDirectory()
-		return h, io.EOF; // h is empty here
+		return h, io.EOF // h is empty here
 	}
 	if h, err = readHeader(signature, r.r); err != nil {
 		return
 	}
 	r.n += 1
-	r.cur = decompressors[h.Method](io.LimitReader(r.r, int64(h.CompressedSize64)));
+	r.cur = decompressors[h.Method](io.LimitReader(r.r, int64(h.CompressedSize64)))
 	return
 }
 
 func (r *Reader) CentralDirectory() ([]zip.FileHeader, error) {
-	if ! r.centralDirectory {
+	if !r.centralDirectory {
 		return nil, errors.New("Not ready to read central directory")
 	}
 	var err error
 	r.centralDirectory = false
-	r.FileHeader, err = r.fillFiles();
+	r.FileHeader, err = r.fillFiles()
 	return r.FileHeader, err
 }
 

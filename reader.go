@@ -13,13 +13,16 @@ type Reader struct {
 	r io.Reader
 	cur io.ReadCloser
 
+	// Central directory fields, unused mid-extraction
 	FileHeader []zip.FileHeader
 	n int
+	centralDirectory bool
 }
 
 func NewReader(ri io.Reader) (ro Reader, err error) {
 	ro.r = ri
 	ro.n = 0
+	ro.centralDirectory = false
 	return
 }
 
@@ -106,10 +109,9 @@ func (r *Reader) Next() (h zip.FileHeader, err error) {
 	}
 	var signature uint32
 	binary.Read(r.r, binary.LittleEndian, &signature)
-	if signature == CENTRALRECORD { // collect all central directory headers
-		if r.FileHeader, err = r.fillFiles(); err != nil {
-			return // with err
-		}
+	if signature == CENTRALRECORD {
+		r.centralDirectory = true
+		// collection is punted to CentralDirectory()
 		return h, io.EOF; // h is empty here
 	}
 	if h, err = readHeader(signature, r.r); err != nil {
@@ -118,6 +120,16 @@ func (r *Reader) Next() (h zip.FileHeader, err error) {
 	r.n += 1
 	r.cur = decompressors[h.Method](io.LimitReader(r.r, int64(h.CompressedSize64)));
 	return
+}
+
+func (r *Reader) CentralDirectory() ([]zip.FileHeader, error) {
+	if ! r.centralDirectory {
+		return nil, errors.New("Not ready to read central directory")
+	}
+	var err error
+	r.centralDirectory = false
+	r.FileHeader, err = r.fillFiles();
+	return r.FileHeader, err
 }
 
 func (r Reader) Read(b []byte) (n int, err error) {

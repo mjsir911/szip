@@ -31,6 +31,16 @@ go's http lazy downloading with that.
 [4]: https://golang.org/pkg/archive/tar/#Reader
 [5]: https://golang.org/pkg/compress/flate
 
+### A note about permissions
+
+Because zip record's permissions are stored in the central directory header
+at the bottom of the file, this information cannot be acquired in-transit.
+
+Because of this, on `Reader`'s EOF, `Reader.File` is populated with the
+central directory header's information. This is otherwise unused during the
+extraction process, and is provided to be used for reading additional metadata
+after extraction.
+
 
 ## Similar projects
 

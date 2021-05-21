@@ -6,6 +6,8 @@ import (
 	"io"
 	"path/filepath"
 	"os"
+	"strings"
+	"log"
 )
 
 func extractZip(target string, r *szip.Reader) error {
@@ -16,6 +18,10 @@ func extractZip(target string, r *szip.Reader) error {
 			break
 		} else if err != nil {
 			return err
+		}
+		if strings.Contains(hdr.Name, "..") {
+			log.Printf("Record name contains \"..\", not extracting: %v", hdr.Name)
+			continue
 		}
 		path := filepath.Join(target, hdr.Name)
 		// path = hdr.Name
@@ -46,6 +52,10 @@ func extractZip(target string, r *szip.Reader) error {
 
 func extractPermissions(target string, hdrs []zip.FileHeader) error {
 	for _, hdr := range hdrs {
+		if strings.Contains(hdr.Name, "..") {
+			log.Printf("Record name contains \"..\", not updating permissions: %v", hdr.Name)
+			continue
+		}
 		path := filepath.Join(target, hdr.Name)
 		info := hdr.FileInfo()
 		if err := os.Chmod(path, info.Mode()); err != nil {

@@ -52,3 +52,7 @@ to be used for reading additional metadata after extraction.
 - similar command line interface
 - supports many decompress methods
 - zip64 support
+
+### [fflate](https://github.com/101arrowz/fflate)
+- TypeScript / Rust wasm
+- extensive

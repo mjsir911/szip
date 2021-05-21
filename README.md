@@ -46,3 +46,9 @@ to be used for reading additional metadata after extraction.
 
 ### [stream-unzip](https://github.com/uktrade/stream-unzip)
 - python
+
+### [sunzip](https://github.com/madler/sunzip)
+- C
+- similar command line interface
+- supports many decompress methods
+- zip64 support

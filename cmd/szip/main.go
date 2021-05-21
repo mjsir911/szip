@@ -9,7 +9,7 @@ import (
 
 
 func main() {
-	var r, _ = szip.NewReader(os.Stdin);
+	r := szip.NewReader(os.Stdin);
 
 	var (
 		outputDir string

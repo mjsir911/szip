@@ -13,7 +13,7 @@ Built looking at the [wikipedia article][1] and the [go source code for
 zip][3].
 
 The interface is somehwat like the [tar reader interface][4], it has a:
-- `func NewReader(r io.Reader) *Reader`
+- `func NewReader(r io.Reader) Reader`
 - `func (r *Reader) Next() (zip.FileHeader, error)`
 - `func (r Reader) Read(b []byte) (int, error)`
 

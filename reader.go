@@ -19,7 +19,7 @@ type Reader struct {
 	centralDirectory bool
 }
 
-func NewReader(ri io.Reader) (ro Reader, err error) {
+func NewReader(ri io.Reader) (ro Reader) {
 	ro.r = ri
 	ro.n = 0
 	ro.centralDirectory = false

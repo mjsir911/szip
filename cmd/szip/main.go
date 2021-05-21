@@ -31,10 +31,11 @@ func main() {
 			panic(err)
 		}
 		if ! permissionless {
-			if _, err := r.CentralDirectory(); err != nil {
+			files, err := r.CentralDirectory()
+			if err != nil {
 				panic(err)
 			}
-			if err := extractPermissions(outputDir, r.FileHeader); err != nil {
+			if err := extractPermissions(outputDir, files); err != nil {
 				panic(err)
 			}
 		}

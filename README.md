@@ -36,9 +36,9 @@ go's http lazy downloading with that.
 Because zip record's permissions are stored in the central directory header
 at the bottom of the file, this information cannot be acquired in-transit.
 
-Because of this, after `Reader`'s EOF, `Reader.FileHeader` is populated with
-the central directory header's information on a `Reader.CentralDirectory()`
-call. This is otherwise unused during the extraction process, and is provided
+Because of this, after `Reader`'s EOF, a call to `Reader.CentralDirectory()
+will return an array of headers found in the central directory.
+This is otherwise unused during the extraction process, and is provided
 to be used for reading additional metadata after extraction.
 
 

@@ -1,3 +1,3 @@
-module sirabella.org/code/szip
+module code.sirabella.org/szip
 
 go 1.16

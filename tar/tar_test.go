@@ -4,7 +4,7 @@ import (
 	"testing"
 	"os"
 	"io"
-	"sirabella.org/code/szip"
+	"code.sirabella.org/szip"
 	"archive/tar"
 )
 

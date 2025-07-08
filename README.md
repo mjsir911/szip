@@ -56,3 +56,9 @@ to be used for reading additional metadata after extraction.
 ### [fflate](https://github.com/101arrowz/fflate)
 - TypeScript / Rust wasm
 - extensive
+
+### [unzip-http](https://github.com/saulpw/unzip-http)
+
+- HTTP range requests -- not exactly streaming
+- much more stable/reliable if applicable
+- python
